@@ -1,16 +1,21 @@
-<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Propuesta de matrimonio</title>
+  <title>Propuesta de Matrimonio</title>
   <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     body {
       font-family: 'Arial', sans-serif;
       background-color: #fff0f5;
       text-align: center;
-      padding: 0;
-      margin: 0;
-      overflow: hidden;
+      overflow-x: hidden;
+      overflow-y: auto;
     }
 
     #intro {
@@ -89,23 +94,60 @@
       font-size: 1.2em;
       color: #c71585;
       animation: fadeIn 1s ease-in-out;
+      z-index: 5;
+      position: relative;
+      max-height: 70vh;
+      overflow-y: auto;
     }
 
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
     }
+
+    .heart {
+      position: fixed;
+      width: 20px;
+      height: 20px;
+      background-color: pink;
+      transform: rotate(45deg);
+      animation: float 5s infinite;
+      z-index: 0;
+    }
+
+    .heart::before,
+    .heart::after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background-color: pink;
+      border-radius: 50%;
+    }
+
+    .heart::before {
+      top: -10px;
+      left: 0;
+    }
+
+    .heart::after {
+      left: -10px;
+      top: 0;
+    }
+
+    @keyframes float {
+      0% { bottom: 0; opacity: 1; }
+      100% { bottom: 100%; opacity: 0; transform: translateX(50px) rotate(45deg); }
+    }
   </style>
 </head>
 <body>
 
-  <!-- Pantalla de inicio -->
   <div id="intro">
     <h1>Mi amor, hoy te tengo que preguntar algo 💞</h1>
     <button id="startBtn">Empezar</button>
   </div>
 
-  <!-- Pantalla principal -->
   <h1 id="mainTitle" style="display:none;">¿Quieres casarte conmigo? 💍</h1>
 
   <div class="buttons" id="mainButtons" style="display:none;">
@@ -115,16 +157,14 @@
 
   <div id="letter">
     💌 Mi amor,<br><br>
-    No puedo imaginar mi vida sin ti. Eres mi alegría, mi paz, mi todo.<br>
-    Gracias por estar conmigo en cada paso. Hoy, quiero dar el siguiente contigo...<br><br>
-    ¿Te casarías conmigo? 💍<br><br>
-    Te amo por siempre. ❤️
+    Todavía no me creo que dijiste que sí. Desde que te conocí, supe que había algo especial en ti, pero jamás imaginé que tendría la suerte de llamarte mi futura esposa. Gracias por confiar en mí, por elegirme, por compartir tu vida conmigo.<br><br>
+    Este sí tuyo no es solo una palabra, es el inicio de una nueva aventura, de un hogar que construiremos juntos, de sueños que se entrelazan. Prometo amarte, cuidarte, y hacerte reír incluso en los días grises. Prometo que cada día haré todo lo posible para que nunca te arrepientas de haber dicho que sí.<br><br>
+    Te amo con todo lo que soy, y estoy emocionado por todo lo que viene.<br><br>
+    Tu futuro esposo 💍❤️
   </div>
 
-  <!-- Reproductor de audio (oculto) -->
   <audio id="music" src="cancion.mp3"></audio>
 
-  <!-- Confetti -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
   <script>
@@ -187,13 +227,19 @@
       intro.style.display = 'none';
       mainTitle.style.display = 'block';
       buttons.style.display = 'block';
-
-      // Reproducir la música
-      music.play().catch(err => {
-        console.log("No se pudo reproducir automáticamente. El usuario debe interactuar primero.");
-      });
+      music.play().catch(() => {});
     });
+
+    function createHeart() {
+      const heart = document.createElement('div');
+      heart.classList.add('heart');
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.animationDuration = (Math.random() * 3 + 2) + "s";
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 5000);
+    }
+
+    setInterval(createHeart, 500);
   </script>
 
 </body>
-</html>
