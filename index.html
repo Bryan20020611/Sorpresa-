@@ -1,0 +1,199 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Propuesta de matrimonio</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #fff0f5;
+      text-align: center;
+      padding: 0;
+      margin: 0;
+      overflow: hidden;
+    }
+
+    #intro {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #ffe4ec;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 10;
+    }
+
+    #intro h1 {
+      font-size: 2em;
+      color: #c71585;
+      margin-bottom: 30px;
+    }
+
+    #startBtn {
+      padding: 15px 30px;
+      font-size: 1.2em;
+      background-color: #ff69b4;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    h1 {
+      font-size: 2.5em;
+      color: #c71585;
+      margin-top: 100px;
+    }
+
+    .buttons {
+      margin-top: 40px;
+      position: relative;
+      height: 100px;
+    }
+
+    button {
+      padding: 15px 30px;
+      font-size: 1.2em;
+      margin: 10px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    #yesBtn {
+      background-color: #ff69b4;
+      color: white;
+      position: relative;
+      z-index: 1;
+    }
+
+    #noBtn {
+      background-color: #d3d3d3;
+      color: #555;
+      position: absolute;
+      z-index: 2;
+    }
+
+    #letter {
+      display: none;
+      margin-top: 50px;
+      padding: 30px;
+      width: 60%;
+      margin-left: auto;
+      margin-right: auto;
+      background-color: #fff;
+      border: 2px solid #c71585;
+      border-radius: 10px;
+      font-size: 1.2em;
+      color: #c71585;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Pantalla de inicio -->
+  <div id="intro">
+    <h1>Mi amor, hoy te tengo que preguntar algo 💞</h1>
+    <button id="startBtn">Empezar</button>
+  </div>
+
+  <!-- Pantalla principal -->
+  <h1 id="mainTitle" style="display:none;">¿Quieres casarte conmigo? 💍</h1>
+
+  <div class="buttons" id="mainButtons" style="display:none;">
+    <button id="yesBtn">Sí 💖</button>
+    <button id="noBtn">No 😢</button>
+  </div>
+
+  <div id="letter">
+    💌 Mi amor,<br><br>
+    No puedo imaginar mi vida sin ti. Eres mi alegría, mi paz, mi todo.<br>
+    Gracias por estar conmigo en cada paso. Hoy, quiero dar el siguiente contigo...<br><br>
+    ¿Te casarías conmigo? 💍<br><br>
+    Te amo por siempre. ❤️
+  </div>
+
+  <!-- Reproductor de audio (oculto) -->
+  <audio id="music" src="cancion.mp3"></audio>
+
+  <!-- Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <script>
+    const noBtn = document.getElementById('noBtn');
+    const yesBtn = document.getElementById('yesBtn');
+    const letter = document.getElementById('letter');
+    const buttons = document.querySelector('.buttons');
+    const intro = document.getElementById('intro');
+    const startBtn = document.getElementById('startBtn');
+    const mainTitle = document.getElementById('mainTitle');
+    const music = document.getElementById('music');
+
+    function moveNoButton() {
+      const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
+      const y = Math.random() * (window.innerHeight - noBtn.offsetHeight - 100);
+      noBtn.style.left = `${x}px`;
+      noBtn.style.top = `${y}px`;
+    }
+
+    noBtn.addEventListener('mouseover', moveNoButton);
+    noBtn.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      moveNoButton();
+    });
+
+    yesBtn.addEventListener('click', () => {
+      buttons.style.display = 'none';
+      letter.style.display = 'block';
+
+      confetti({
+        particleCount: 150,
+        spread: 100,
+        origin: { y: 0.6 }
+      });
+
+      const duration = 2 * 1000;
+      const end = Date.now() + duration;
+
+      (function frame() {
+        confetti({
+          particleCount: 5,
+          angle: 60,
+          spread: 55,
+          origin: { x: 0 }
+        });
+        confetti({
+          particleCount: 5,
+          angle: 120,
+          spread: 55,
+          origin: { x: 1 }
+        });
+
+        if (Date.now() < end) {
+          requestAnimationFrame(frame);
+        }
+      })();
+    });
+
+    startBtn.addEventListener('click', () => {
+      intro.style.display = 'none';
+      mainTitle.style.display = 'block';
+      buttons.style.display = 'block';
+
+      // Reproducir la música
+      music.play().catch(err => {
+        console.log("No se pudo reproducir automáticamente. El usuario debe interactuar primero.");
+      });
+    });
+  </script>
+
+</body>
+</html>
